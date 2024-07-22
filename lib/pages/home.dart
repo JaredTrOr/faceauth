@@ -1,200 +1,154 @@
-// import 'package:face_net_authentication/constants/constants.dart';
-import 'package:face_net_authentication/locator.dart';
-import 'package:face_net_authentication/pages/db/databse_helper.dart';
-import 'package:face_net_authentication/pages/sign-in.dart';
-import 'package:face_net_authentication/pages/sign-up.dart';
-import 'package:face_net_authentication/services/camera.service.dart';
-import 'package:face_net_authentication/services/ml_service.dart';
-import 'package:face_net_authentication/services/face_detector_service.dart';
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  MLService _mlService = locator<MLService>();
-  FaceDetectorService _mlKitService = locator<FaceDetectorService>();
-  CameraService _cameraService = locator<CameraService>();
-  bool loading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeServices();
-  }
-
-  _initializeServices() async {
-    setState(() => loading = true);
-    await _cameraService.initialize();
-    await _mlService.initialize();
-    _mlKitService.initialize();
-    setState(() => loading = false);
-  }
+class _HomePageState extends State<HomePage> {
+  String selectedSection = 'Cuarto';
+  bool isLedOn = false;
+  bool isDoorOpen = false;
+  double temperature = 25.0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Container(),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: <Widget>[
+        // title: Text('Smart Home'),
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 20, top: 20),
-            child: PopupMenuButton<String>(
-              child: Icon(
-                Icons.more_vert,
-                color: Colors.black,
-              ),
-              onSelected: (value) {
-                switch (value) {
-                  case 'Clear DB':
-                    DatabaseHelper _dataBaseHelper = DatabaseHelper.instance;
-                    _dataBaseHelper.deleteAll();
-                    break;
-                }
-              },
-              itemBuilder: (BuildContext context) {
-                return {'Clear DB'}.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              },
-            ),
+            padding: const EdgeInsets.all(8.0),
+            // child: CircleAvatar(
+            //   backgroundImage: AssetImage('assets/user.jpg'), // Reemplaza con la ruta de tu imagen de usuario
+            // ),
           ),
         ],
       ),
-      body: !loading
-          ? SingleChildScrollView(
-              child: SafeArea(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Image(image: AssetImage('assets/logo_face.png')),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: Column(
-                          children: [
-                            Text(
-                              "Autenticación con reconocimiento facial",
-                              style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              height: 60,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 20,
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: Divider(
-                              thickness: 2,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => SignIn(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Colors.blue.withOpacity(0.1),
-                                    blurRadius: 1,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 14, horizontal: 16),
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Iniciar sesión',
-                                    style: TextStyle(color: Color(0xFF0F0BDB)),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Icon(Icons.login, color: Color(0xFF0F0BDB))
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => SignUp(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Color(0xFF0F0BDB),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Colors.blue.withOpacity(0.1),
-                                    blurRadius: 1,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 14, horizontal: 16),
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Registro',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Icon(Icons.person_add, color: Colors.white)
-                                ],
-                              ),
-                            ),
-                          ),                          
-                        ],
-                      )
-                    ],
+      drawer: Drawer(
+          child: CustomScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                DrawerHeader(
+                    decoration: BoxDecoration(color: Colors.purple.shade300),
+                    child: Padding(padding: EdgeInsets.only(top: 40), child:  Text('Secciones de la casa', style: TextStyle(color: Colors.white, fontSize: 20)),) 
                   ),
+
+                ListTile(
+                  title: Text('Cuartos'),
+                  onTap: () {
+                    setState(() {
+                      selectedSection = 'Cuarto';
+                    });
+                    Navigator.pop(context);
+                  },
                 ),
-              ),
-            )
-          : Center(
-              child: CircularProgressIndicator(),
+                ListTile(
+                  title: Text('Sala'),
+                  onTap: () {
+                    setState(() {
+                      selectedSection = 'Sala';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('Cocina'),
+                  onTap: () {
+                    setState(() {
+                      selectedSection = 'Cocina';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                // all of your list tiles
+              ],
+              crossAxisAlignment: CrossAxisAlignment.stretch,
             ),
+          ),
+          SliverFillRemaining(
+            child: Align(
+              child: ListTile(
+                leading: Icon(Icons.arrow_back_outlined,
+                    color: Colors.red, size: 30),
+                title: Text('Salir', style: TextStyle(color: Colors.red),),
+                onTap: () => Navigator.pop(context),
+              ),
+              alignment: Alignment.bottomCenter,
+            ),
+            hasScrollBody: false,
+          )
+        ],
+      )),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 16, left: 16),
+            child: Text(
+              'Sección: $selectedSection',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(height: 20),
+          Expanded(
+            child: Image.asset(
+              'assets/${selectedSection}_${isLedOn ? 'light' : 'dark'}.png', // Asegúrate de tener imágenes para cada sección
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                        isLedOn ? Icons.lightbulb : Icons.lightbulb_outline),
+                    iconSize: 48,
+                    color: isLedOn ? Colors.yellow : Colors.grey,
+                    onPressed: () {
+                      setState(() {
+                        print('LED ON');
+                        isLedOn = !isLedOn;
+                      });
+                    },
+                  ),
+                  Text(isLedOn ? 'LED On' : 'LED Off'),
+                ],
+              ),
+              Column(
+                children: [
+                  IconButton(
+                    icon: Icon(isDoorOpen ? Icons.lock_open : Icons.lock),
+                    iconSize: 48,
+                    color: isDoorOpen ? Colors.green : Colors.grey,
+                    onPressed: () {
+                      setState(() {
+                        isDoorOpen = !isDoorOpen;
+                      });
+                    },
+                  ),
+                  Text(isDoorOpen ? 'Door Open' : 'Door Closed'),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Center(
+              child: Padding(
+            padding: EdgeInsets.all(18),
+            child: Text(
+              'Temperatura: $temperature°C',
+              style: TextStyle(fontSize: 18),
+            ),
+          ))
+        ],
+      ),
     );
   }
 }
