@@ -38,6 +38,9 @@ dependencies:
   url_launcher: ^6.0.3
   sqflite: ^2.0.2
   get_it: ^7.2.0
+  flutter_blue: ^0.8.0
+  flutter_bluetooth_serial: ^0.4.0
+  permission_handler: ^11.0.1
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +61,12 @@ flutter:
   assets:
     - assets/mobilefacenet.tflite
     - assets/logo_face.png
+    - assets/Cuarto_dark.png
+    - assets/Cuarto_light.png
+    - assets/Cocina_dark.png
+    - assets/Cocina_light.png
+    - assets/Sala_dark.png
+    - assets/Sala_light.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
