@@ -6,7 +6,7 @@ import 'package:face_net_authentication/pages/widgets/app_button.dart';
 import 'package:face_net_authentication/services/camera.service.dart';
 import 'package:face_net_authentication/services/ml_service.dart';
 import 'package:flutter/material.dart';
-import '../home.dart';
+import '../auth_home_page.dart';
 import 'app_text_field.dart';
 
 class AuthActionButton extends StatefulWidget {
@@ -46,12 +46,13 @@ class _AuthActionButtonState extends State<AuthActionButton> {
     await _databaseHelper.insert(userToSave);
     this._mlService.setPredictedData([]);
     Navigator.push(context,
-        MaterialPageRoute(builder: (BuildContext context) => MyHomePage()));
+        MaterialPageRoute(builder: (BuildContext context) => AuthHomePage()));
   }
 
   Future _signIn(context) async {
     String password = _passwordTextEditingController.text;
     if (this.predictedUser!.password == password) {
+      print('LLENDO A LA OTRA PÁGINAAAAAAAA----------------------------');
       Navigator.push(
           context,
           MaterialPageRoute(

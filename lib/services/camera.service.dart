@@ -55,9 +55,19 @@ class CameraService {
   Future<XFile?> takePicture() async {
     assert(_cameraController != null, 'Camera controller not initialized');
     await _cameraController?.stopImageStream();
-    XFile? file = await _cameraController?.takePicture();
-    _imagePath = file?.path;
-    return file;
+
+
+    print('TAKING A FUKINGGG PICTURE----------------------------------------');
+    try {
+      XFile? file = await _cameraController?.takePicture();
+      _imagePath = file?.path;
+      return file;
+    } catch(e) {
+      XFile? file = await _cameraController?.takePicture();
+      _imagePath = file?.path;
+      return file;
+    }
+    
   }
 
   Size getImageSize() {
